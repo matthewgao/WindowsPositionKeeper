@@ -3,8 +3,7 @@ import win32gui, win32con, win32api
 import time, math, random, sys
 import pickle
 
-
-winList = ["Lynn (Ling) Zhang","½ðÌ«Ñô","Chrome"]
+winList = []
 
 def _RecordWindCallback( hwnd, extra ):  
     windows = extra  
@@ -29,50 +28,62 @@ def _RestoreWindCallback( hwnd, extra ):
                         placement = list(entry[item][2])
                         #placement[1] = 4 
                         #placement = tuple(placement)
-                        print placement[0]
+                        #print placement[0]
                         #print placement[1]
                         #print placement[2]
                         #print placement[3]
                         #win32gui.SetWindowPlacement(hwnd,placement)
                         win32gui.MoveWindow(hwnd,placement[0],placement[1],placement[2]-placement[0],placement[3]-placement[1],True)
-                        
+                        del entry[item]
+                        break
 
 def TestEnumWindows():  
     windows = {}
     win32gui.EnumWindows(_RecordWindCallback, windows)
     print "Enumerated a total of  windows with %d classes",(len(windows))
-    print '------------------------------'
+
     #print classes
     #print windows
      
     for item in windows :  
-        print  windows[item]
-    print '-------------------------------' 
+        print  windows[item][1]
+ 
     return windows
 
 def PrintAllWindow():
-    print "------------Printing all windows...------------"  
+    print "------------Printing all windows------------"  
     TestEnumWindows()
     print "------------All done!------------"      
 
 def SaveAllWindows():
     win = TestEnumWindows()
-    SaveTuple(win)
+    SaveTuple(win,'cache')
 
 def RestoreWindows():
-    entry = ParseFile()
+    entry = ParseFile('cache')
     for item in entry :
         print  entry[item]
     win32gui.EnumWindows(_RestoreWindCallback, entry)      
 
-def CreateList():
+def CreateList(arg):
+    if arg[1] != "-c":
+        Usage()
+        return
+    
+    length = len(arg)-2
+    print arg
+    print length
+    tmplist = list(arg[2:2+length])
+    print tmplist
+    SaveTuple(tmplist, 'windows.list')
+    
     return 0
 
-def SaveTuple(entry):
-    with open('cache', 'wb') as f:
+def SaveTuple(entry, filename):
+    with open(filename, 'wb') as f:
         pickle.dump(entry, f)
-def ParseFile():
-    with open('cache', 'rb') as f:
+def ParseFile(filename):
+    with open(filename, 'rb') as f:
         entry = pickle.load(f)
     return entry
 
@@ -91,15 +102,12 @@ if __name__ == "__main__":
     elif sys.argv[1] == "-s":
         SaveAllWindows()
     elif sys.argv[1] == "-r":
+        winList = ParseFile('windows.list')
         RestoreWindows()
     elif sys.argv[1] == "-c":
-        CreateList()
+        CreateList(sys.argv)
     else:
         Usage()
-
-    #PrintAllWindow()
-    #win = TestEnumWindows()
-    #SaveTuple(win)
 
     
     
