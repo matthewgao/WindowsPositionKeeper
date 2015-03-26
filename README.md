@@ -25,8 +25,8 @@ Note: you only have to create and save the windows once, if there is no change, 
 ## Note
 
 * You can use "python main.py -c add or del" to add or delete key words
-* No Minimized windows, otherwise it will have issue when restore the windows.
+* Don't minimized windows which you want to save the position, otherwise it will have issue when restore the windows. You can use the method that in "troubleshoot" section to get you windows back.
 
 ## Troubleshooting
 
-Using win+up or down to show up the windows which can't find.
+Using WIN+up or down (right or left) to show up the windows which can't find.
