@@ -21,3 +21,12 @@ The tools is run on Python, so first of all you need to install a Python 2.7(Not
 7. Then you can run at any time when you need to restore the windows position with `python.exe main.py -r`
 
 Note: you only have to create and save the windows once, if there is no change, then don't need to update it any more, because we have a local cache has saved them all.
+
+## Note
+
+* You can use "python main.py -c add or del" to add or delete key words
+* No Minimized windows, otherwise it will have issue when restore the windows.
+
+## Troubleshooting
+
+Using win+up or down to show up the windows which can't find.
