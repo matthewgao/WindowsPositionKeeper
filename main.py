@@ -58,11 +58,12 @@ def _RestoreWindCallback( hwnd, extra ):
 def TestEnumWindows():  
     windows = {}
     win32gui.EnumWindows(_RecordWindCallback, windows)
-    print "Enumerated a total of windows with %d classes",(len(windows))
+    #print "Enumerated a total of windows with %d classes",(len(windows))
      
-    for item in windows :  
+    for item in windows :
+        print "------------------------------------"
         print  windows[item][1]
-        print  windows[item][2]
+        #print  windows[item][2]
  
     return windows
 
