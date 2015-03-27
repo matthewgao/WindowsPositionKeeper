@@ -19,6 +19,7 @@ def _RecordWindCallback( hwnd, extra ):
         #temp.append(win32gui.GetWindowPlacement(hwnd))
         ##win32gui.SetWindowPlacement(hwnd,placement)
         temp.append(win32gui.GetWindowRect(hwnd))
+        temp.append(win32gui.GetWindowPlacement(hwnd))
         windows[hwnd] = temp
 
 def _RestoreWindCallback( hwnd, extra ):  
@@ -31,14 +32,22 @@ def _RestoreWindCallback( hwnd, extra ):
                 for item in entry :
                     if entry[item][1].find(listItem) != -1:
                         placement = list(entry[item][2])
-                        if placement[0]<0:
+                        minOrMax = entry[item][3][1]
+                        print minOrMax
+                        if minOrMax == 2 or minOrMax == 3:
+                            placement = entry[item][3]
+                            win32gui.SetWindowPlacement(hwnd,placement)
+                            print "Restore : " + str(win32gui.GetWindowText(hwnd))
+                            del entry[item]
+                            break
+                            
+                        '''
+                        if placement[0] == -32000 and placement[1] == -32000:
                             placement[0] = 0
-                        if placement[1]<0:
                             placement[1] = 0
-                        if placement[2]<0:
                             placement[2] = 0
-                        if placement[3]<0:
                             placement[3] = 0
+                        '''
                         #placement[1] = 4 
                         #placement = tuple(placement)
                         #print placement[0]
@@ -50,7 +59,7 @@ def _RestoreWindCallback( hwnd, extra ):
                         '''
                         MoveWindows parameter is X,Y,weight,height
                         '''
-                        win32gui.MoveWindow(hwnd,placement[0],placement[1],placement[2]-placement[0],placement[3]-placement[1],True)
+                        win32gui.MoveWindow(hwnd,placement[0],placement[1],abs(placement[2]-placement[0]),abs(placement[3]-placement[1]),True)
                         print "Restore : " + str(win32gui.GetWindowText(hwnd))
                         del entry[item]
                         break
@@ -62,8 +71,9 @@ def TestEnumWindows():
      
     for item in windows :
         print "------------------------------------"
-        print  windows[item][1]
-        #print  windows[item][2]
+        print  "Windows Name: " + str(windows[item][1])
+        print  "Windows Position: " + str(windows[item][2])
+        print  "Windows flag: " + str(windows[item][3])
  
     return windows
 
